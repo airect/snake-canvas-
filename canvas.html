@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<canvas id="canvas">your brower don`t support canvas</canvas>
+	<script type="text/javascript">
+	var canvas=document.getElementById('canvas');
+	if(canvas.getContext){
+		var ctx=canvas.getContext('2d');
+	}
+
+	//set width and height
+	canvas.width=500;
+	canvas.height=500;
+	canvas.style.border="solid 1px #000";
+
+	//init
+	var circle={x:39,y:20,r:10,color:'#000'};
+	var time;
+	var count=0;
+
+
+
+
+	//make translation
+	function timer(target){
+		//timer
+		clearInterval(time);
+		time=setInterval(function(){
+			//
+			update(target);
+			render();
+
+
+		},17);
+	}
+
+	//render
+	function render(){
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		ctx.beginPath();
+		ctx.arc(circle.x,circle.y,circle.r,0,Math.PI*360/180,false);
+		ctx.closePath();
+		ctx.fillStyle=circle.color;
+		ctx.fill();
+	}
+	//update
+	//return target position
+	function update(target){
+		count++;
+		switch(target){
+			case 1:
+				circle.x++;
+				break;
+			case 2:
+				circle.x--;
+				break;
+			case 3:
+				circle.y--;
+				break;
+			case 4:
+				circle.y++;
+				break;
+		}
+		//if the d position of circle more or less than 10,then stop the timer.
+		// if(count>=10){
+		// 	clearInterval(time);
+		// 	count=0;
+
+		// }else{
+		// 	console.log(circle.x,circle.y);
+		// }
+
+		//
+		//right
+		if(circle.x+circle.r>=canvas.width){
+			circle.x=circle.r;
+		}
+		//left
+		if(circle.x-circle.r<=0){
+			circle.x=canvas.width-circle.r;
+		}
+		//bottom
+		if(circle.y+circle.r>=canvas.height){
+			circle.y=circle.r;
+		}
+		//top
+		if (circle.y<=circle.r){
+			circle.y=canvas.height-circle.r;
+		}
+
+	}
+	//
+	document.addEventListener('keydown',function(){
+		//
+		var whatkey=0;
+		//right
+		if(event.keyCode==39){
+			//console.log("right");
+			circle.x+=10;
+			whatkey=1;
+		}
+		//left
+		if(event.keyCode==37){
+			circle.x-=10;
+			whatkey=2;
+		}
+		//up
+		if(event.keyCode==38){
+			circle.y-=10;
+			whatkey=3;
+		}
+		//down
+		if(event.keyCode==40){
+			circle.y+=10;
+			whatkey=4;
+		}
+		//translation
+		timer(whatkey);
+	})
+	</script>
+</body>
+</html>
